@@ -2,5 +2,8 @@
 
 class Client < ApplicationRecord
   has_many :orders
-  # TODO validations
+
+  validates :email, uniqueness: true
+  validates :name, presence: true
+
 end

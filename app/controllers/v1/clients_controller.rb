@@ -6,8 +6,8 @@ module V1
 
     def index
       @clients = Client.order(name: params[:order] || :DESC)
-                        .page(params[:page])
-                        .per(params[:per_page])
+                       .page(params[:page])
+                       .per(params[:per_page])
     end
 
     def show; end
