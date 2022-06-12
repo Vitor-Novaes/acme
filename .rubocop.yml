@@ -1,0 +1,26 @@
+AllCops:
+  Exclude:
+    - 'bin/*'
+    - 'vendor/**/*'
+    - 'spec/fixtures/**/*'
+    - 'spec/**/*helper.rb'
+    - 'spec/support/**/*.rb'
+    - 'tmp/**/*'
+    - 'db/**/*.rb'
+    - '**/schema.rb'
+    - 'lib/tasks/**/*.rake'
+  TargetRubyVersion: 3.0.0
+
+Style/Encoding:
+  Enabled: true
+
+Style/EndOfLine:
+  EnforcedStyle: lf
+
+Metrics/BlockLength:
+  Exclude:
+    - '**/*.rake'
+    - 'spec/**/*.rb'
+    - 'db/**/*.rb'
+    - '**/schema.rb'
+    - 'config/**/*.rb'
