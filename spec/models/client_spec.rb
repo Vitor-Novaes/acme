@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe Client, typ: :model do
+describe Client, type: :model do
   subject { FactoryBot.build(:client) }
 
   it { should validate_presence_of(:name) }

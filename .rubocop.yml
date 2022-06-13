@@ -20,6 +20,9 @@ Style/CommentAnnotation:
 Style/Documentation:
   Enabled: false
 
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
 Style/EndOfLine:
   EnforcedStyle: lf
 

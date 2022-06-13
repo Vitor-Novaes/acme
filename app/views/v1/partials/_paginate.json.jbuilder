@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 json.metadata do
   json.total_count records.total_count
   json.count records.count
