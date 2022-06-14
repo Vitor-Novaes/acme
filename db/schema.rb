@@ -45,7 +45,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_14_181838) do
 
   create_table "products", force: :cascade do |t|
     t.decimal "base_value", precision: 8, scale: 2, null: false
-    t.string "name"
+    t.string "name", null: false
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

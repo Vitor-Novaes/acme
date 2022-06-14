@@ -1,26 +1,20 @@
-
 default: &default
-  adapter: postgresql
-  encoding: unicode
-  host: localhost
-  username: postgres
-  password: nouvak@1234
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  adapter: <%= ENV['DATABASE_ADAPTER'] || 'postgresql' %>
+  encoding: <%= ENV['DATABASE_ENCODING'] || 'unicode' %>
+  pool: <%= ENV['DATABASE_POOL'] || '5' %>
+  timeout: <%= ENV['DATABASE_TIMEOUT'] || '5000' %>
+  host: <%= ENV['DATABASE_HOST'] || '127.0.0.1' %>
+  username: <%= ENV['DATABASE_USERNAME'] || 'postgres' %>
+  password: <%= ENV['DATABASE_PASSWORD'] || 'password' %>
 
 development:
   <<: *default
   database: acme_development
 
-
 test:
   <<: *default
   database: acme_test
 
-
 production:
   <<: *default
   database: acme_production
-  username: acme
-  password: <%= ENV["ACME_DATABASE_PASSWORD"] %>

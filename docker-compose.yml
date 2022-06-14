@@ -1,0 +1,42 @@
+version: '3.5'
+
+volumes:
+  data:
+
+services:
+  base: &base
+    build: .
+    volumes:
+      - ./:/acme
+    ports: []
+    tmpfs:
+      - /tmp
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+
+  app:
+    <<: *base
+    env_file: .env
+    command: bundle exec rails s -p 3000 -b 0.0.0.0
+    ports:
+      - 3000:3000
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  specs:
+    <<: *base
+    command: bundle exec rspec spec
+    environment:
+      RAILS_ENV: test
+      DATABASE_PASSWORD: nouvak@1234
+
