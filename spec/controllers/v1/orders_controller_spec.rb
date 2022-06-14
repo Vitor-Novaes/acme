@@ -72,16 +72,37 @@ describe V1::OrdersController, type: :controller do
 
   describe 'POST /v1/orders' do
     context 'When put invalid attributes' do
+      let(:product) { create(:product, :with_variants, variant_count: 2) }
+      let(:variant) { create(:variant, id: 3) }
+
       before do
         post :create, params: attributes_for(:order,
                                              code: '123456789098',
-                                             status: 'Raining Blood')
+                                             status: 'Raining Blood',
+                                             registers_attributes: [
+                                               {
+                                                 product_id: 1,
+                                                 variant_id: 3,
+                                                 quantity: 2
+                                               },
+                                               {
+                                                 product_id: 1,
+                                                 variant_id: 3,
+                                                 quantity: 2
+                                               }
+                                             ])
       end
 
       include_examples 'unprocess_entity response'
 
       it 'Then return error type validation' do
         expect(json_response[:errors][:status]).to eq(['Invalid status'])
+        expect(json_response[:errors][:registers]).to eq([
+                                                           'Variant 3 doesnt belongs that product 1',
+                                                           'Variant 100 doesnt belongs that product 600'
+                                                         ])
+        expect(json_response[:errors][:'registers.product']).to eq(['must exist'])
+        expect(json_response[:errors][:'registers.variant']).to eq(['must exist'])
       end
     end
 
@@ -104,14 +125,32 @@ describe V1::OrdersController, type: :controller do
         expect(json_response[:errors][:state]).to eq(["can't be blank"])
         expect(json_response[:errors][:address]).to eq(["can't be blank"])
         expect(json_response[:errors][:city]).to eq(["can't be blank"])
+        expect(json_response[:errors][:registers]).to eq(["can't be blank"])
         expect(json_response[:errors][:net_value]).to eq(['is not a number', "can't be blank"])
       end
     end
 
     context 'When put valid data' do
       let(:client) { create(:client) }
+      let(:product) { create(:product, :with_variants, variant_count: 2) }
+
       before do
-        post :create, params: attributes_for(:order, client_id: client.id)
+        post :create, params: attributes_for(
+          :order,
+          client_id: client.id,
+          registers_attributes: [
+            {
+              product_id: 1,
+              variant_id: 1,
+              quantity: 2
+            },
+            {
+              product_id: 1,
+              variant_id: 2,
+              quantity: 2
+            }
+          ]
+        )
       end
 
       include_examples 'ok response'

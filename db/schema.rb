@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_13_151527) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_14_181838) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,6 +52,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_13_151527) do
     t.index ["category_id"], name: "index_products_on_category_id"
   end
 
+  create_table "registers", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "product_id", null: false
+    t.bigint "variant_id", null: false
+    t.integer "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_registers_on_order_id"
+    t.index ["product_id"], name: "index_registers_on_product_id"
+    t.index ["variant_id"], name: "index_registers_on_variant_id"
+  end
+
   create_table "variants", force: :cascade do |t|
     t.string "code", null: false
     t.decimal "value", precision: 8, scale: 2, null: false
@@ -59,10 +71,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_13_151527) do
     t.bigint "product_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "sales", default: 0
     t.index ["product_id"], name: "index_variants_on_product_id"
   end
 
   add_foreign_key "orders", "clients"
   add_foreign_key "products", "categories"
+  add_foreign_key "registers", "orders"
+  add_foreign_key "registers", "products"
+  add_foreign_key "registers", "variants"
   add_foreign_key "variants", "products"
 end

@@ -20,4 +20,6 @@ describe Order, type: :model do
   it { should_not allow_value('FF').for(:status) }
 
   it { should belong_to(:client) }
+  it { should have_many(:registers) }
+  it { should have_many(:products).through(:registers) }
 end
