@@ -8,6 +8,7 @@ FactoryBot.define do
     state { Faker::Address.state }
     address { Faker::Address.street_name }
     city { Faker::Address.city }
+    net_value { Faker::Number.decimal(l_digits: 2, r_digits: 2) }
     client factory: :client
   end
 end

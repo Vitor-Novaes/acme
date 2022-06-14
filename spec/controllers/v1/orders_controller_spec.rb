@@ -92,7 +92,8 @@ describe V1::OrdersController, type: :controller do
                                              status: nil,
                                              state: nil,
                                              address: nil,
-                                             city: nil)
+                                             city: nil,
+                                             net_value: nil)
       end
 
       include_examples 'unprocess_entity response'
@@ -103,6 +104,7 @@ describe V1::OrdersController, type: :controller do
         expect(json_response[:errors][:state]).to eq(["can't be blank"])
         expect(json_response[:errors][:address]).to eq(["can't be blank"])
         expect(json_response[:errors][:city]).to eq(["can't be blank"])
+        expect(json_response[:errors][:net_value]).to eq(['is not a number', "can't be blank"])
       end
     end
 
@@ -121,7 +123,7 @@ describe V1::OrdersController, type: :controller do
   end
 
   describe 'PATCH /v1/orders/:id' do
-    let(:order) { create(:order, id: 1) }
+    let!(:order) { create(:order, id: 1) }
 
     context 'When put invalid id' do
       before { patch :update, params: { id: 90, payment_date: '2022-07-13' } }
@@ -147,7 +149,7 @@ describe V1::OrdersController, type: :controller do
   end
 
   describe 'DELETE /v1/orders/:id' do
-    let(:order) { create(:order, id: 1) }
+    let!(:order) { create(:order, id: 1) }
 
     context 'When put invalid id' do
       before { delete :destroy, params: { id: 1000 } }

@@ -6,5 +6,7 @@ Rails.application.routes.draw do
   namespace :v1, defaults: { format: :json }, constraints: { format: :json } do
     resources :orders
     resources :clients
+    resources :categories, except: %i[show]
+    resources :products
   end
 end

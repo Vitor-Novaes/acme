@@ -9,6 +9,7 @@ class CreateOrders < ActiveRecord::Migration[7.0]
       t.string :state, null: false
       t.string :address, null: false
       t.string :city, null: false
+      t.decimal :net_value, precision: 8, scale: 2, null: false
       t.references :client, foreign_key: true, null: false
 
       t.timestamps

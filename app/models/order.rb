@@ -7,6 +7,7 @@ class Order < ApplicationRecord
             presence: true
   validates :address, :city, :state, presence: true
   validates :code, presence: true, uniqueness: true
+  validates :net_value, numericality: true, presence: true
 
   # TODO custom validation code on: :update
 end

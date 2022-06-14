@@ -32,7 +32,7 @@ module V1
 
     def permitted_params
       # TODO products: []
-      params.permit(:status, :address, :city, :state, :payment_date, :code, :client_id)
+      params.permit(:status, :address, :city, :state, :payment_date, :code, :client_id, :net_value)
     end
 
     def update_permitted_params
