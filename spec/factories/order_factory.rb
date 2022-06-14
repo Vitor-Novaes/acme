@@ -10,17 +10,5 @@ FactoryBot.define do
     city { Faker::Address.city }
     net_value { Faker::Number.decimal(l_digits: 2, r_digits: 2) }
     client factory: :client
-
-    trait :with_registers do
-      transient do
-        register_count { 1 }
-      end
-
-      after(:create) do |product, evaluator|
-        register_count.times do
-          create(:register, order: order)
-        end
-      end
-    end
   end
 end

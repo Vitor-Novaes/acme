@@ -6,8 +6,8 @@ module V1
 
     def index
       @categories = Category.order(created_at: params[:sort] || :DESC)
-                       .page(params[:page])
-                       .per(params[:per_page])
+                            .page(params[:page])
+                            .per(params[:per_page])
     end
 
     def create
