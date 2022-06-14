@@ -65,7 +65,7 @@ describe V1::OrdersController, type: :controller do
 
       it 'Then return information' do
         expect(json_response[:order][:id]).to eq(order.id)
-        expect(json_response[:order][:client]).not_to be_blank
+        expect(json_response[:order][:client]).not_to be_empty
       end
     end
   end
@@ -86,8 +86,8 @@ describe V1::OrdersController, type: :controller do
                                                  quantity: 2
                                                },
                                                {
-                                                 product_id: 1,
-                                                 variant_id: 3,
+                                                 product_id: 600,
+                                                 variant_id: 100,
                                                  quantity: 2
                                                }
                                              ])
@@ -125,14 +125,13 @@ describe V1::OrdersController, type: :controller do
         expect(json_response[:errors][:state]).to eq(["can't be blank"])
         expect(json_response[:errors][:address]).to eq(["can't be blank"])
         expect(json_response[:errors][:city]).to eq(["can't be blank"])
-        expect(json_response[:errors][:registers]).to eq(["can't be blank"])
         expect(json_response[:errors][:net_value]).to eq(['is not a number', "can't be blank"])
       end
     end
 
     context 'When put valid data' do
-      let(:client) { create(:client) }
-      let(:product) { create(:product, :with_variants, variant_count: 2) }
+      let!(:client) { create(:client) }
+      let!(:product) { create(:product, :with_variants, variant_count: 2, id: 1) }
 
       before do
         post :create, params: attributes_for(
@@ -157,6 +156,7 @@ describe V1::OrdersController, type: :controller do
 
       it 'Then return success response' do
         expect(json_response).to have_key(:id)
+        expect(json_response[:client_id]).to eq(client.id)
       end
     end
   end
