@@ -31,8 +31,13 @@ module V1
     private
 
     def permitted_params
-      # TODO products: []
-      params.permit(:status, :address, :city, :state, :payment_date, :code, :client_id)
+      params.permit(
+        :status, :address,
+        :city, :state,
+        :payment_date, :code,
+        :client_id, :net_value,
+        registers_attributes: %i[quantity product_id variant_id]
+      )
     end
 
     def update_permitted_params

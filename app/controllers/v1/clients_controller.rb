@@ -21,7 +21,7 @@ module V1
     def update
       @client.update!(permitted_params)
 
-      render json: find_client, status: :ok
+      render json: @client, status: :ok
     end
 
     # TODO at least for now

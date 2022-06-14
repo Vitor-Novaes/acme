@@ -65,23 +65,44 @@ describe V1::OrdersController, type: :controller do
 
       it 'Then return information' do
         expect(json_response[:order][:id]).to eq(order.id)
-        expect(json_response[:order][:client]).not_to be_blank
+        expect(json_response[:order][:client]).not_to be_empty
       end
     end
   end
 
   describe 'POST /v1/orders' do
     context 'When put invalid attributes' do
+      let(:product) { create(:product, :with_variants, variant_count: 2) }
+      let(:variant) { create(:variant, id: 3) }
+
       before do
         post :create, params: attributes_for(:order,
                                              code: '123456789098',
-                                             status: 'Raining Blood')
+                                             status: 'Raining Blood',
+                                             registers_attributes: [
+                                               {
+                                                 product_id: 1,
+                                                 variant_id: 3,
+                                                 quantity: 2
+                                               },
+                                               {
+                                                 product_id: 600,
+                                                 variant_id: 100,
+                                                 quantity: 2
+                                               }
+                                             ])
       end
 
       include_examples 'unprocess_entity response'
 
       it 'Then return error type validation' do
         expect(json_response[:errors][:status]).to eq(['Invalid status'])
+        expect(json_response[:errors][:registers]).to eq([
+                                                           'Variant 3 doesnt belongs that product 1',
+                                                           'Variant 100 doesnt belongs that product 600'
+                                                         ])
+        expect(json_response[:errors][:'registers.product']).to eq(['must exist'])
+        expect(json_response[:errors][:'registers.variant']).to eq(['must exist'])
       end
     end
 
@@ -92,7 +113,8 @@ describe V1::OrdersController, type: :controller do
                                              status: nil,
                                              state: nil,
                                              address: nil,
-                                             city: nil)
+                                             city: nil,
+                                             net_value: nil)
       end
 
       include_examples 'unprocess_entity response'
@@ -103,25 +125,44 @@ describe V1::OrdersController, type: :controller do
         expect(json_response[:errors][:state]).to eq(["can't be blank"])
         expect(json_response[:errors][:address]).to eq(["can't be blank"])
         expect(json_response[:errors][:city]).to eq(["can't be blank"])
+        expect(json_response[:errors][:net_value]).to eq(['is not a number', "can't be blank"])
       end
     end
 
     context 'When put valid data' do
-      let(:client) { create(:client) }
+      let!(:client) { create(:client) }
+      let!(:product) { create(:product, :with_variants, variant_count: 2, id: 1) }
+
       before do
-        post :create, params: attributes_for(:order, client_id: client.id)
+        post :create, params: attributes_for(
+          :order,
+          client_id: client.id,
+          registers_attributes: [
+            {
+              product_id: 1,
+              variant_id: 1,
+              quantity: 2
+            },
+            {
+              product_id: 1,
+              variant_id: 2,
+              quantity: 2
+            }
+          ]
+        )
       end
 
       include_examples 'ok response'
 
       it 'Then return success response' do
         expect(json_response).to have_key(:id)
+        expect(json_response[:client_id]).to eq(client.id)
       end
     end
   end
 
   describe 'PATCH /v1/orders/:id' do
-    let(:order) { create(:order, id: 1) }
+    let!(:order) { create(:order, id: 1) }
 
     context 'When put invalid id' do
       before { patch :update, params: { id: 90, payment_date: '2022-07-13' } }
@@ -147,7 +188,7 @@ describe V1::OrdersController, type: :controller do
   end
 
   describe 'DELETE /v1/orders/:id' do
-    let(:order) { create(:order, id: 1) }
+    let!(:order) { create(:order, id: 1) }
 
     context 'When put invalid id' do
       before { delete :destroy, params: { id: 1000 } }
