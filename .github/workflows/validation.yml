@@ -29,8 +29,7 @@ jobs:
           --health-retries 5
     env:
       RAILS_ENV: test
-      DATABASE_HOST: 127.0.0.1
-      DATABASE_PASSWORD: password
+      DATABASE_URL: postgres://postgres:password@db:5432/acme_test
     steps:
       - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1

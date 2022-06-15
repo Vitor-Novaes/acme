@@ -28,6 +28,7 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: password
+      POSTGRESQL_USER: postgres
     volumes:
       - data:/var/lib/postgresql/data
     ports:
@@ -38,5 +39,5 @@ services:
     command: bundle exec rspec spec
     environment:
       RAILS_ENV: test
-      DATABASE_PASSWORD: nouvak@1234
+      DATABASE_URL: postgres://postgres:password@db:5432/acme_test
 
