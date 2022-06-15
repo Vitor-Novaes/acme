@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-bundle exec rails db:create db:migrate
+bundle exec rails db:migrate
 echo "PostgreSQL database has been created & migrated!"
 
 # Remove a potentially pre-existing server.pid for Rails.
