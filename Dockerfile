@@ -14,6 +14,8 @@ RUN apt-get update -qq && apt-get install -y build-essential \
 COPY Gemfile $INSTALL_PATH/Gemfile
 COPY Gemfile.lock $INSTALL_PATH/Gemfile.lock
 
+ENV RAILS_ENV=production
+
 # Dependence install
 RUN gem install bundler && \
   bundle install
@@ -26,4 +28,4 @@ COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 EXPOSE 3000
 
-ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+ENTRYPOINT ["entrypoint.sh"]
