@@ -4,16 +4,18 @@ default: &default
   pool: <%= ENV['DATABASE_POOL'] || '5' %>
   timeout: <%= ENV['DATABASE_TIMEOUT'] || '5000' %>
   host: <%= ENV['DATABASE_HOST'] || '127.0.0.1' %>
-  username: <%= ENV['DATABASE_USERNAME'] || 'postgres' %>
-  password: <%= ENV['DATABASE_PASSWORD'] || 'nouvak@1234' %>
 
 development:
   <<: *default
   database: acme_development
+  username: <%= ENV['DATABASE_USERNAME'] || 'postgres' %>
+  password: <%= ENV['DATABASE_PASSWORD'] || 'nouvak@1234' %>
 
 test:
   <<: *default
   database: acme_test
+  username: <%= ENV['DATABASE_USERNAME'] || 'postgres' %>
+  password: <%= ENV['DATABASE_PASSWORD'] || 'nouvak@1234' %>
 
 production:
   <<: *default
