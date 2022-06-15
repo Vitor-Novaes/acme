@@ -11,3 +11,32 @@ jobs:
           bundler-cache: true
       - run: gem install rubocop
       - run: rubocop
+  specs:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: acme_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      RAILS_ENV: test
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0.4'
+          bundler-cache: true
+      - run: bundle install
+      - run: bundle exec rails db:prepare
+        env:
+          DATABASE_PASSWORD: postgres
+      - run: bundle exec rspec
