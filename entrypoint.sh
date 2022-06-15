@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-bundle exec rails db:create db:migrate
+bundle exec rails db:migrate
 echo "PostgreSQL database has been created & migrated!"
 
 # Remove a potentially pre-existing server.pid for Rails.
@@ -17,4 +17,6 @@ echo "        '.'"
 echo " "
 echo ""
 echo ""
-bundle exec rails s -p 3000 -b 0.0.0.0
+
+# Then exec the container's main process (what's set as CMD in the Dockerfile).
+exec "$@"
