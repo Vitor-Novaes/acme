@@ -18,7 +18,7 @@ jobs:
         image: postgres
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: password
           POSTGRES_DB: acme_test
         ports:
           - 5432:5432
@@ -29,6 +29,8 @@ jobs:
           --health-retries 5
     env:
       RAILS_ENV: test
+      DATABASE_HOST: 127.0.0.1
+      DATABASE_PASSWORD: password
     steps:
       - uses: actions/checkout@v3
       - uses: ruby/setup-ruby@v1
@@ -37,6 +39,4 @@ jobs:
           bundler-cache: true
       - run: bundle install
       - run: bundle exec rails db:prepare
-        env:
-          DATABASE_PASSWORD: postgres
       - run: bundle exec rspec
