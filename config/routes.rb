@@ -8,5 +8,7 @@ Rails.application.routes.draw do
     resources :clients
     resources :categories, except: %i[show]
     resources :products
+
+    post 'orders/import-data', to: 'orders#import'
   end
 end

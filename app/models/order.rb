@@ -1,4 +1,6 @@
 class Order < ApplicationRecord
+  include ImportData
+
   STATUS = %w[SENT WAITING PRODUCTION CANCELED POSTING].freeze
   belongs_to :client
 
@@ -14,6 +16,10 @@ class Order < ApplicationRecord
   validates :net_value, numericality: true, presence: true
   after_commit :update_sales_variant, on: :create
   validate :products_valid?
+
+  def import_data(file)
+    csv_file(file)
+  end
 
   private
 

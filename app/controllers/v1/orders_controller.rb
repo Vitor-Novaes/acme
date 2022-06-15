@@ -28,6 +28,12 @@ module V1
       @order.destroy
     end
 
+    def import
+      Order.new.import_data(import_params)
+
+      render json: { message: 'successfully imported' }
+    end
+
     private
 
     def permitted_params
@@ -42,6 +48,10 @@ module V1
 
     def update_permitted_params
       params.permit(:status, :payment_date)
+    end
+
+    def import_params
+      params.require(:file)
     end
 
     def find_order
