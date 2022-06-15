@@ -29,7 +29,7 @@ module ImportData
         sucess += 1
       rescue StandardError => e
         fails += 1
-        message << e
+        message << "#{index}: #{e}"
         next
       end
     end
@@ -107,9 +107,22 @@ module ImportData
         })
     else
       order = result.first
-      if order.products.include?(@product)
-        variant = Variant.where(code: variant_code)
-        variant.first.update(sales: variant.first.sales + 1) unless variant.empty?
+      register = Register
+                        .where(variant_id: @variant.id)
+                        .where(product_id: @product.id)
+
+      if register.empty?
+        Register.create({
+          product: @product,
+          variant: @variant,
+          quantity: 1,
+          order: order
+        })
+      else
+        register.first.update!({
+          quantity: register.first.quantity + 1
+        })
+        register.first.variant.update!(sales: register.first.variant.sales + 1)
       end
     end
   end
