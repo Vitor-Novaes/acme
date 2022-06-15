@@ -13,8 +13,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
       - name: Heroku Container registry
+        uses: actions/checkout@v1
 
       - name: Docker build
         run: docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
