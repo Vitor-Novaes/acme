@@ -1,8 +1,8 @@
 # test
 name: deploy-main
-push:
-  branches:
-    - main
+on:
+  push:
+    branches: [ main ]
 
 env:
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
