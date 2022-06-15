@@ -26,6 +26,9 @@ gem 'kaminari'
 # [https://github.com/davidcelis/api-pagination/]
 gem 'api-pagination'
 
+# [https://github.com/roo-rb/roo]
+gem 'roo'
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
