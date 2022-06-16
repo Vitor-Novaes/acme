@@ -5,7 +5,7 @@ module ImportData
   FILE_FORMATS = %w[text/csv].freeze
 
   def csv_file(file)
-    raise('The file must be CSV type') unless FILE_FORMATS.include?(file.content_type)
+    raise(ArgumentError, 'The file must be CSV type') unless FILE_FORMATS.include?(file.content_type)
 
     csv = Roo::CSV.new(file, csv_options: { col_sep: ',', encoding: 'bom|utf-8' })
     rows = csv.sheet(0)
