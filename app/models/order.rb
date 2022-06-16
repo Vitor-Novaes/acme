@@ -1,6 +1,16 @@
 class Order < ApplicationRecord
   include ImportData
 
+  scope :by_category, lambda { |params|
+    joins(products: :category).where(category: { name: params[:by_category] })
+  }
+
+  scope :sort_by_sales, lambda { |params|
+    order(net_value: params[:sort_by_sales] || 'DESC')
+  }
+
+  scope :by_status, ->(params) { where(status: params[:status]) }
+
   STATUS = %w[SENT WAITING PRODUCTION CANCELED POSTING].freeze
   belongs_to :client
 

@@ -4,7 +4,9 @@ describe V1::ProductsController, type: :controller do
   render_views
 
   describe 'GET /v1/products' do
-    let!(:products) { create_list(:product, 20, :with_variants) }
+    let!(:category) { create(:category, name: 'A perfect circle') }
+    let!(:products) { create_list(:product, 10, :with_variants) }
+    let!(:product) { create_list(:product, 10, :with_variants, category: category) }
 
     context 'When normal request without params' do
       before(:example) { get :index }
@@ -41,6 +43,40 @@ describe V1::ProductsController, type: :controller do
         expect(json_response[:metadata][:current_page]).to eq(4)
         expect(json_response[:metadata][:total_count]).to eq(20)
         expect(json_response[:metadata][:total_pages]).to eq(4)
+      end
+    end
+
+    context 'When request with sort by sold' do
+      before(:example) { get :index, params: { sort_by_sales: 'DESC' } }
+
+      include_examples 'ok response'
+
+      it 'Then return all of data order most sold' do
+        expect(json_response[:products].count).to eq(10)
+        expect(
+          json_response[:products].first[:total_sales] >
+          json_response[:products].last[:total_sales]
+        ).to be_truthy
+        expect(json_response[:metadata][:current_page]).to eq(1)
+        expect(json_response[:metadata][:total_count]).to eq(20)
+        expect(json_response[:metadata][:total_pages]).to eq(2)
+      end
+    end
+
+    context 'When request with sort by sold and category' do
+      before(:example) { get :index, params: { sort_by_sales: 'DESC', by_category: 'A perfect circle' } }
+
+      include_examples 'ok response'
+
+      it 'Then return all of data order most sold by category' do
+        expect(json_response[:products].count).to eq(10)
+        expect(
+          json_response[:products].first[:total_sales] >
+          json_response[:products].last[:total_sales]
+        ).to be_truthy
+        expect(json_response[:metadata][:current_page]).to eq(1)
+        expect(json_response[:metadata][:total_count]).to eq(10)
+        expect(json_response[:metadata][:total_pages]).to eq(1)
       end
     end
   end

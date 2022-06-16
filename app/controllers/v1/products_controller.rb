@@ -5,9 +5,9 @@ module V1
     before_action :find_product, only: %i[show update destroy]
 
     def index
-      @products = Product.order(created_at: params[:sort] || :DESC)
-                         .page(params[:page])
-                         .per(params[:per_page])
+      @products = filter_sort(filter_permitted, Product)
+                  .page(params[:page])
+                  .per(params[:per_page])
     end
 
     def show; end
@@ -37,6 +37,10 @@ module V1
         :category_id,
         variants_attributes: %i[id code value image _destroy]
       )
+    end
+
+    def filter_permitted
+      params.permit(:sort_by_sales, :by_category)
     end
 
     def find_product
