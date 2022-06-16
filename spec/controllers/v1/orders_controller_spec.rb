@@ -43,6 +43,25 @@ describe V1::OrdersController, type: :controller do
         expect(json_response[:metadata][:total_pages]).to eq(4)
       end
     end
+
+    context 'When request with sort by sold' do
+      before(:example) { get :index, params: { sort_by_sales: 'DESC' } }
+
+      include_examples 'ok response'
+
+      it 'Then return all of data order most expensive order' do
+        expect(json_response[:orders].count).to eq(10)
+        expect(
+          json_response[:orders].first[:net_value] >
+          json_response[:orders].last[:net_value]
+        ).to be_truthy
+        expect(json_response[:metadata][:current_page]).to eq(1)
+        expect(json_response[:metadata][:total_count]).to eq(20)
+        expect(json_response[:metadata][:total_pages]).to eq(2)
+      end
+    end
+
+    # context 'When request with sort by sold and category' needs factory
   end
 
   describe 'GET /v1/orders/:id' do

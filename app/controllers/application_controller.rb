@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
+  include SearchTerm
+
   rescue_from ActionController::RoutingError, with: :render_not_found_route
   rescue_from ActiveRecord::RecordInvalid, with: :render_active_record_invalid
   rescue_from ActiveRecord::RecordNotFound, with: :render_active_record_not_found
