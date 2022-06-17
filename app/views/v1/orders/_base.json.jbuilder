@@ -5,4 +5,5 @@ json.status order.status
 json.state order.state
 json.address order.address
 json.city order.city
+json.net_value order.net_value
 json.call(order, :created_at, :updated_at)
