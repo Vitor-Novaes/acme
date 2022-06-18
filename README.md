@@ -6,6 +6,8 @@
 
 - Rename `.env.example` for `.env`
 
+- On file `./entrypoint.sh` > replace in L#4 for `bundle exec rails db:create db:migrate`
+
 - Execute on project's directory `$ docker-compose up app`
 
 #### Local
