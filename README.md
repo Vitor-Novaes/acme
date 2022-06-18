@@ -1,5 +1,4 @@
 # ACME API
-
 ## Setup
 
 #### Docker
@@ -34,6 +33,12 @@ test:
 - Install globally nodemon for listen file changes `$ npm i -g nodemon` Than execute `$ nodemon -L --exec "./rails.sh"`
 
 - Or if you perfer, only execute `$ rails db:create db:migrate && rails s`
+
+
+#### Import CSV
+On Concerns: [acme/app/models/concerns/import_data.rb](https://github.com/Vitor-Novaes/acme/blob/main/app/models/concerns/import_data.rb)
+
+
 
 ## ERB
 
