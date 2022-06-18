@@ -14,7 +14,7 @@ class Order < ApplicationRecord
   STATUS = %w[SENT WAITING PRODUCTION CANCELED POSTING].freeze
   belongs_to :client
 
-  has_many :registers
+  has_many :registers, dependent: :destroy
   has_many :products, through: :registers
   accepts_nested_attributes_for :registers
 

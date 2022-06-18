@@ -1,5 +1,5 @@
 class Client < ApplicationRecord
-  has_many :orders
+  has_many :orders, dependent: :destroy
 
   validates :email,
             presence: true,
